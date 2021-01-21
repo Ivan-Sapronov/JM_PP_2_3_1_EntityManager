@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование пользователя</title>
+</head>
+<body>
+<form th:method="PATCH" th:action="@{/users/{id}(id=${user.getId()})}" th:object="${user}">
+    <label for="inputName">Имя:     </label>
+    <input type="text" th:field="*{name}" id="inputName"/>
+    <br/>
+    <label for="inputSurname">Фамилия: </label>
+    <input type="text" th:field="*{surname}" id="inputSurname"/>
+    <br/>
+    <label for="inputAge">Возраст: </label>
+    <input type="text" th:field="*{age}" id="inputAge"/>
+    <br/>
+    <label for="inputEmail">Email:   </label>
+    <input type="text" th:field="*{email}" id="inputEmail"/>
+    <br/>
+    <br/>
+    <input type="submit" value="Обновить!">
+</form>
+
+</body>
+</html>
