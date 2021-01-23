@@ -1,69 +1,52 @@
 package ru.sapronov.jm_pp_2_3_1.dao;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.stereotype.Component;
-import ru.sapronov.jm_pp_2_3_1.config.HibernateConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import ru.sapronov.jm_pp_2_3_1.model.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 /**
  * @author Ivan Sapronov
  */
-@Component
+@Repository
 public class UserDAOImpl implements UserDAO {
 
-    private SessionFactory sessionFactory = HibernateConfiguration.getSessionFactory();
+    @Autowired
+    private EntityManagerFactory emf;
 
     @Override
     public List<User> index(){
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        List<User> users = session.createQuery("from User").getResultList();
-        transaction.commit();
-
+        List<User> users = emf.createEntityManager().createQuery("SELECT u from User u").getResultList();
         return users;
     }
+
     @Override
     public User show(int id){
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        User user = session.get(User.class, id);
-        transaction.commit();
+        User user = emf.createEntityManager().find(User.class, id);
         return user;
     }
+
     @Override
     public void save(User user) {
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        session.save(user);
-        transaction.commit();
+        emf.createEntityManager().persist(user);
     }
+
     @Override
     public void update(int id, User user) {
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        User userInDB = session.get(User.class, id);
-
+        User userInDB = emf.createEntityManager().find(User.class, id);
         userInDB.setName(user.getName());
         userInDB.setSurname(user.getSurname());
         userInDB.setAge(user.getAge());
         userInDB.setEmail(user.getEmail());
-
-        transaction.commit();
     }
+
     @Override
     public void delete(int id) {
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-        User user = session.get(User.class, id);
-        session.delete(user);
-        transaction.commit();
+        EntityManager entityManager = emf.createEntityManager();
+        User user = entityManager.find(User.class, id);
+        entityManager.remove(user);
     }
 }

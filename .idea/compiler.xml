@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="JM_PP_2_3_1" />
+        <module name="task-jm-pp-2.3.1" />
       </profile>
     </annotationProcessing>
   </component>
